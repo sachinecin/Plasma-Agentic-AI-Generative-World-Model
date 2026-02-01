@@ -1,0 +1,9 @@
+Feature Branch Changes
+======================
+
+This file contains changes made in the feature branch.
+
+New Features:
+- Added phantom path simulation engine
+- Implemented LoRA distillation module
+- Created generative world model interface
