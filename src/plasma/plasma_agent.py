@@ -5,7 +5,7 @@ Combines Phantom-Path Simulator, LoRA Distiller, and Judicial Auditor
 import asyncio
 import numpy as np
 from typing import List, Optional, Dict, Any, Callable
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .phantom_path import PhantomPathSimulator
 from .distiller import LoRADistiller
@@ -272,7 +272,7 @@ class PlasmaAgent:
                 "trace_id": trace.trace_id,
                 "packet_id": packet.packet_id if packet else None,
                 "reward": trace.reward,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             })
             
             # Allow other coroutines to run

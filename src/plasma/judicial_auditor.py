@@ -5,7 +5,7 @@ Implements self-correcting logic and adversarial monitoring
 import asyncio
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple, Callable
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import defaultdict
 
 from .state_traces import StateTrace, AuditRecord, SimulationResult, InstructionPacket
@@ -317,7 +317,7 @@ class JudicialAuditor:
             corrected_reward = max(-1.0, min(1.0, trace.reward))
             return StateTrace(
                 trace_id=trace.trace_id,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 state_vector=trace.state_vector,
                 action_taken=trace.action_taken,
                 reward=corrected_reward,
@@ -330,7 +330,7 @@ class JudicialAuditor:
             normalized = state_array / (np.linalg.norm(state_array) + 1e-8)
             return StateTrace(
                 trace_id=trace.trace_id,
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(timezone.utc),
                 state_vector=normalized.tolist(),
                 action_taken=trace.action_taken,
                 reward=trace.reward,

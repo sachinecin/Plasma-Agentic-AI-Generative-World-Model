@@ -292,7 +292,7 @@ Record of an audit check by the Judicial Auditor.
 **Fields:**
 - `audit_id: str` - Unique identifier
 - `timestamp: datetime` - Timestamp
-- `state_trace_id: str` - ID of traced being audited
+- `state_trace_id: str` - ID of trace being audited
 - `anomaly_score: float` - Anomaly detection score (0-1)
 - `reward_hacking_detected: bool` - Whether reward-hacking was detected
 - `adversarial_flags: List[str]` - List of detected issues
