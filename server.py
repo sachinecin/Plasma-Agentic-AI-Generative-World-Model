@@ -9,7 +9,7 @@ from lightweight instruction packets deployed to edge devices.
 import asyncio
 import logging
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, WebSocket, HTTPException, BackgroundTasks
@@ -148,7 +148,7 @@ async def health_check():
     """Health check endpoint."""
     return HealthCheck(
         status="healthy",
-        timestamp=datetime.utcnow().isoformat(),
+        timestamp=datetime.now(timezone.utc).isoformat(),
         world_model_loaded=state.world_model is not None,
         active_simulations=len(state.active_simulations)
     )
@@ -181,7 +181,7 @@ async def run_simulation(request: SimulationRequest, background_tasks: Backgroun
     logger.info(f"Simulation request from agent {request.agent_id}")
     
     # Create simulation ID
-    sim_id = f"{request.agent_id}_{datetime.utcnow().timestamp()}"
+    sim_id = f"{request.agent_id}_{datetime.now(timezone.utc).timestamp()}"
     
     # TODO: Implement actual simulation
     # async def run_phantom_paths():
@@ -197,7 +197,7 @@ async def run_simulation(request: SimulationRequest, background_tasks: Backgroun
         'agent_id': request.agent_id,
         'task': request.task_description,
         'status': 'running',
-        'started_at': datetime.utcnow().isoformat()
+        'started_at': datetime.now(timezone.utc).isoformat()
     }
     
     # background_tasks.add_task(run_phantom_paths)
@@ -244,7 +244,7 @@ async def start_training(config: TrainingConfig):
         'agent_id': config.agent_id,
         'task_name': config.task_name,
         'status': 'initiated',
-        'timestamp': datetime.utcnow().isoformat(),
+        'timestamp': datetime.now(timezone.utc).isoformat(),
         'config': config.dict()
     }
     
@@ -327,14 +327,14 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             msg_type = data.get('type')
             
             if msg_type == 'ping':
-                await websocket.send_json({'type': 'pong', 'timestamp': datetime.utcnow().isoformat()})
+                await websocket.send_json({'type': 'pong', 'timestamp': datetime.now(timezone.utc).isoformat()})
             
             elif msg_type == 'status_update':
                 # Client requesting status update
                 status = {
                     'type': 'status',
                     'active_simulations': len(state.active_simulations),
-                    'timestamp': datetime.utcnow().isoformat()
+                    'timestamp': datetime.now(timezone.utc).isoformat()
                 }
                 await websocket.send_json(status)
             

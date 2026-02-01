@@ -64,7 +64,11 @@ class InstructionPacketRuntime:
             #     packet_data = deserialize_packet(f.read())
             
             # Placeholder: load JSON packet info
-            packet_data = json.loads(packet_path.read_text())
+            try:
+                packet_data = json.loads(packet_path.read_text())
+            except json.JSONDecodeError as e:
+                logger.error(f"Invalid packet format: Expected JSON, got malformed data. Error: {e}")
+                return False
             
             self.loaded_packet = packet_data
             self.agent_id = packet_data.get('agent_id', 'unknown')
