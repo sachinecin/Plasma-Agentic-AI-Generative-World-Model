@@ -50,6 +50,7 @@ class ReviewEngine:
         
         findings = []
         score = 1.0
+        avg_length = 0.0
         
         # Analyze path quality
         if paths:
@@ -82,7 +83,7 @@ class ReviewEngine:
         recommendations = []
         if score < 0.8:
             recommendations.append("Increase path diversity")
-        if avg_length < 10:
+        if paths and avg_length < 10:
             recommendations.append("Generate longer paths for better learning")
             
         passed = score >= criteria.get("min_score", 0.7)
