@@ -48,3 +48,6 @@ htmlcov/
 
 # Temporary files
 /tmp/
+
+# Test files
+integration_test.py
